@@ -1,31 +1,46 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Pool Viewer</title><style>
-html,body{margin:0;width:100%;height:100%;background:transparent;overflow:hidden;font-family:Arial,sans-serif}
-.board{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(96vw,1100px);background:rgba(0,0,0,.88);color:#fff;border-radius:10px;overflow:hidden}
-.top{display:flex;justify-content:space-between;padding:10px 18px;background:#111;font-size:clamp(11px,1.7vw,18px);font-weight:700}
-.match{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;text-align:center;padding:14px}
-.player{font-size:clamp(14px,2.4vw,28px);font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.score{font-size:clamp(44px,8vw,90px);font-weight:900;padding:0 22px}
-.status{padding:7px;text-align:center;background:#151515;font-size:clamp(10px,1.4vw,15px)}
-</style></head><body><div class="board">
-<div class="top"><span id="event">POOL COMPETITION</span><span id="frame">FRAME 1</span></div>
-<div class="match"><div class="player" id="p1">PLAYER 1</div><div class="score" id="scores">0 - 0</div><div class="player" id="p2">PLAYER 2</div></div>
-<div class="status" id="status">Connecting…</div></div>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pool Scoreboard Overlay</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;background:transparent;overflow:hidden}
+body{font-family:Arial,Helvetica,sans-serif;color:#fff}
+.wrap{position:absolute;left:3%;right:3%;bottom:3%;height:112px;filter:drop-shadow(0 5px 10px rgba(0,0,0,.45))}
+.main{height:66px;display:grid;grid-template-columns:1fr 180px 1fr;align-items:center;background:linear-gradient(180deg,#111722,#070b12);border:1px solid rgba(255,255,255,.15);border-bottom:0;clip-path:polygon(0 0,100% 0,98.5% 100%,1.5% 100%)}
+.player{height:100%;display:flex;align-items:center;font-size:24px;font-weight:800;letter-spacing:.8px;white-space:nowrap;overflow:hidden}
+.p1{justify-content:flex-start;padding-left:30px;border-left:6px solid #1688ff}
+.p2{justify-content:flex-end;padding-right:30px;border-right:6px solid #ef304c}
+.score{height:100%;display:flex;align-items:center;justify-content:center;gap:24px;font-size:38px;font-weight:900;letter-spacing:2px;border-left:1px solid rgba(255,255,255,.12);border-right:1px solid rgba(255,255,255,.12)}
+.score .frames{font-size:22px;opacity:.9}
+.sub{height:42px;display:grid;grid-template-columns:1fr 42px 1fr;align-items:center;background:rgba(5,8,13,.96);border:1px solid rgba(255,255,255,.12);clip-path:polygon(2% 0,98% 0,96.5% 100%,3.5% 100%);font-size:15px;font-weight:800;letter-spacing:.6px}
+.left{padding-left:48px;text-align:left;border-top:2px solid #1688ff}.right{padding-right:48px;text-align:right;border-top:2px solid #ef304c}.mid{text-align:center;font-size:17px}
+.ball{width:25px;height:25px;border-radius:50%;background:#f5f5f5;color:#111;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;margin:auto}
+.event{position:absolute;top:-25px;left:20px;font-size:11px;font-weight:800;letter-spacing:1px;opacity:.85}
+@media(max-width:800px){.wrap{left:2%;right:2%;bottom:2%;height:90px}.main{height:52px;grid-template-columns:1fr 120px 1fr}.player{font-size:17px}.p1{padding-left:18px}.p2{padding-right:18px}.score{font-size:30px;gap:12px}.score .frames{font-size:16px}.sub{height:34px;font-size:11px;grid-template-columns:1fr 34px 1fr}.left{padding-left:28px}.right{padding-right:28px}.ball{width:20px;height:20px;font-size:10px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="event" id="event">POOL COMPETITION</div>
+<div class="main">
+<div class="player p1" id="p1">PLAYER 1</div>
+<div class="score"><span id="s1">0</span><span class="frames">(<span id="frame">1</span>)</span><span id="s2">0</span></div>
+<div class="player p2" id="p2">PLAYER 2</div>
+</div>
+<div class="sub">
+<div class="left" id="status">DA VILLE DOUBLE LIFE COMP</div>
+<div class="mid"><span class="ball">8</span></div>
+<div class="right" id="match">SEMI FINAL&nbsp;&nbsp;|&nbsp;&nbsp;LIFE 2</div>
+</div>
+</div>
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 import {getDatabase,ref,onValue} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBjxhhz_OJBayYsnbmmfNlzKrpM3rUZ1f4",
-  authDomain: "pool-scoreboard-71c93.firebaseapp.com",
-  databaseURL: "https://pool-scoreboard-71c93-default-rtdb.firebaseio.com",
-  projectId: "pool-scoreboard-71c93",
-  storageBucket: "pool-scoreboard-71c93.firebasestorage.app",
-  messagingSenderId: "401721132284",
-  appId: "1:401721132284:web:65b755b148d1163a7a4379",
-  measurementId: "G-FPBCYM0H1Z"
-};
-
-const db=getDatabase(initializeApp(firebaseConfig)), r=ref(db,"poolScoreboard/room1");
-onValue(r,s=>{const d={p1:"PLAYER 1",p2:"PLAYER 2",s1:0,s2:0,frame:1,event:"POOL COMPETITION",status:"LIVE",...(s.val()||{})};p1.textContent=d.p1;p2.textContent=d.p2;scores.textContent=`${d.s1} - ${d.s2}`;frame.textContent=`FRAME ${d.frame}`;event.textContent=d.event;status.textContent=d.status;},()=>status.textContent="Connection error");
-</script></body></html>
+const firebaseConfig={apiKey:"AIzaSyBjxhhz_OJBayYsnbmmfNlzKrpM3rUZ1f4",authDomain:"pool-scoreboard-71c93.firebaseapp.com",databaseURL:"https://pool-scoreboard-71c93-default-rtdb.firebaseio.com",projectId:"pool-scoreboard-71c93",storageBucket:"pool-scoreboard-71c93.firebasestorage.app",messagingSenderId:"401721132284",appId:"1:401721132284:web:65b755b148d1163a7a4379",measurementId:"G-FPBCYM0H1Z"};
+const db=getDatabase(initializeApp(firebaseConfig));
+onValue(ref(db,"poolScoreboard/room1"),snap=>{const d=snap.val()||{};p1.textContent=d.player1||"PLAYER 1";p2.textContent=d.player2||"PLAYER 2";s1.textContent=d.score1??0;s2.textContent=d.score2??0;frame.textContent=d.frame??1;event.textContent=d.event||"POOL COMPETITION";status.textContent=d.status||"DA VILLE DOUBLE LIFE COMP";match.textContent=d.match||"SEMI FINAL | LIFE 2"});
+</script>
+</body>
+</html>
