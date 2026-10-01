@@ -1,0 +1,43 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pool Control</title><style>
+*{box-sizing:border-box}body{margin:0;background:#101010;color:#fff;font-family:Arial,sans-serif;padding:14px}
+h1{font-size:24px}.card{background:#1c1c1c;border-radius:14px;padding:14px;margin-bottom:12px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}label{display:block;font-size:13px;color:#bbb;margin-bottom:5px}
+input{width:100%;padding:12px;border:1px solid #444;border-radius:9px;background:#111;color:#fff;font-size:17px}
+button{border:0;border-radius:12px;padding:16px;font-size:21px;font-weight:800;background:#333;color:#fff}button:active{transform:scale(.98)}
+.plus{background:#245c2c}.minus{background:#6a2929}.wide{width:100%;margin-top:10px}.danger{background:#7a2020}.score{font-size:38px;text-align:center;font-weight:900;padding:10px}
+</style></head><body><h1>🎱 Pool Scoreboard Control</h1>
+<div class="card"><div class="grid">
+<div><label>Player 1</label><input id="p1" value="PLAYER 1"></div><div><label>Player 2</label><input id="p2" value="PLAYER 2"></div></div>
+<div class="grid" style="margin-top:10px"><div><label>Event</label><input id="event" value="POOL COMPETITION"></div><div><label>Status</label><input id="status" value="LIVE"></div></div>
+<button class="wide" onclick="saveNames()">Update names / title</button></div>
+<div class="card"><div class="grid"><div><div class="score" id="s1">0</div><div class="grid"><button class="minus" onclick="score('s1',-1)">−1</button><button class="plus" onclick="score('s1',1)">+1</button></div></div>
+<div><div class="score" id="s2">0</div><div class="grid"><button class="minus" onclick="score('s2',-1)">−1</button><button class="plus" onclick="score('s2',1)">+1</button></div></div></div></div>
+<div class="card"><div class="grid"><button onclick="frame(-1)">− Frame</button><button onclick="frame(1)">+ Frame</button></div>
+<button class="wide" onclick="nextFrame()">Next frame (reset points)</button></div>
+<div class="card"><div class="grid"><button class="danger" onclick="resetMatch()">Reset</button><button onclick="live()">LIVE</button></div><p id="connection">Connecting…</p></div>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import {getDatabase,ref,onValue,update,set} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBjxhhz_OJBayYsnbmmfNlzKrpM3rUZ1f4",
+  authDomain: "pool-scoreboard-71c93.firebaseapp.com",
+  databaseURL: "https://pool-scoreboard-71c93-default-rtdb.firebaseio.com",
+  projectId: "pool-scoreboard-71c93",
+  storageBucket: "pool-scoreboard-71c93.firebasestorage.app",
+  messagingSenderId: "401721132284",
+  appId: "1:401721132284:web:65b755b148d1163a7a4379",
+  measurementId: "G-FPBCYM0H1Z"
+};
+
+const db=getDatabase(initializeApp(firebaseConfig)),r=ref(db,"poolScoreboard/room1");
+let state={p1:"PLAYER 1",p2:"PLAYER 2",s1:0,s2:0,frame:1,event:"POOL COMPETITION",status:"LIVE"};
+onValue(r,s=>{state={...state,...(s.val()||{})};p1.value=state.p1;p2.value=state.p2;event.value=state.event;status.value=state.status;s1.textContent=state.s1;s2.textContent=state.s2;connection.textContent="✓ Connected — changes are shared online"},()=>connection.textContent="Connection error");
+window.score=async(k,n)=>update(r,{[k]:Math.max(0,Number(state[k]||0)+n)});
+window.frame=async(n)=>update(r,{frame:Math.max(1,Number(state.frame||1)+n)});
+window.nextFrame=async()=>update(r,{frame:Math.max(1,Number(state.frame||1)+1),s1:0,s2:0});
+window.saveNames=async()=>update(r,{p1:p1.value.trim()||"PLAYER 1",p2:p2.value.trim()||"PLAYER 2",event:event.value.trim()||"POOL COMPETITION",status:status.value.trim()||"LIVE"});
+window.live=async()=>update(r,{status:"LIVE"});
+window.resetMatch=async()=>{if(confirm("Reset scores and frame to 1?"))await set(r,{...state,s1:0,s2:0,frame:1,status:"READY"})};
+</script></body></html>
