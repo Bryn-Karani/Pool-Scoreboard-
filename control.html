@@ -69,12 +69,12 @@ function flush(){
   fetch("https://ntfy.sh/sb-"+encodeURIComponent(room),{method:"POST",body:body})
     .then(function(r){if(!r.ok)throw 0;state("Live","ok")})
     .catch(function(){dirty=true;state("Send failed, retrying","bad");setTimeout(flush,4000)})
-    .finally(function(){sending=false;if(dirty)setTimeout(flush,300)});
+    .finally(function(){sending=false;if(dirty)setTimeout(flush,100)});
 }
 function send(){
   try{localStorage.setItem("sb-"+room,JSON.stringify(s))}catch(e){}
   if(bc)bc.postMessage(s);
-  dirty=true;clearTimeout(timer);timer=setTimeout(flush,200);
+  dirty=true;clearTimeout(timer);timer=setTimeout(flush,50);
 }
 function draw(){$("oA").textContent=s.a;$("oB").textContent=s.b;$("oP").value=s.p===null?"":s.p}
 function buzz(){try{navigator.vibrate&&navigator.vibrate(15)}catch(e){}}
