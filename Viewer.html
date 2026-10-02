@@ -26,8 +26,8 @@ text{font-family:"Barlow Semi Condensed","Arial Narrow",Arial,sans-serif;font-we
   <linearGradient id="gL" x1="0" x2="1"><stop offset="0" stop-color="#0c1a3a"/><stop offset=".6" stop-color="#080d1a"/><stop offset="1" stop-color="#060912"/></linearGradient>
   <linearGradient id="gR" x1="0" x2="1"><stop offset="0" stop-color="#060912"/><stop offset=".4" stop-color="#080d1a"/><stop offset="1" stop-color="#2a0b14"/></linearGradient>
   <linearGradient id="gB" x1="0" x2="1"><stop offset="0" stop-color="#0b1b40"/><stop offset=".5" stop-color="#070b15"/><stop offset="1" stop-color="#2a0b14"/></linearGradient>
-  <linearGradient id="sB" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1f5bff"/><stop offset="1" stop-color="#4f8bff"/></linearGradient>
-  <linearGradient id="sR" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff4a58"/><stop offset="1" stop-color="#e0101f"/></linearGradient>
+  <linearGradient id="gsB" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1f5bff"/><stop offset="1" stop-color="#4f8bff"/></linearGradient>
+  <linearGradient id="gsR" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff4a58"/><stop offset="1" stop-color="#e0101f"/></linearGradient>
   <linearGradient id="lnB" x1="0" x2="1"><stop offset="0" stop-color="#2f6bff"/><stop offset="1" stop-color="#2f6bff" stop-opacity=".1"/></linearGradient>
   <linearGradient id="lnR" x1="0" x2="1"><stop offset="0" stop-color="#ff2a3a" stop-opacity=".1"/><stop offset="1" stop-color="#ff2a3a"/></linearGradient>
   <filter id="glow" x="-5%" y="-30%" width="110%" height="160%"><feGaussianBlur stdDeviation="3"/></filter>
@@ -43,8 +43,8 @@ text{font-family:"Barlow Semi Condensed","Arial Narrow",Arial,sans-serif;font-we
   <polyline points="1548,66 1050,66 1015,138 1526,138" stroke="url(#lnR)" opacity=".55" filter="url(#glow)"/>
   <polyline points="1548,66 1050,66 1015,138 1526,138" stroke="url(#lnR)"/>
 </g>
-<polygon points="122,66 154,66 174,138 146,138" fill="url(#sB)"/>
-<polygon points="1522,66 1554,66 1532,138 1504,138" fill="url(#sR)"/>
+<polygon points="122,66 154,66 174,138 146,138" fill="url(#gsB)"/>
+<polygon points="1522,66 1554,66 1532,138 1504,138" fill="url(#gsR)"/>
 
 <text id="nA" class="name" x="248" y="110"></text>
 <text id="nB" class="name" x="1438" y="110" text-anchor="end"></text>
@@ -92,19 +92,21 @@ function draw(s){
 }
 function parse(t){try{return JSON.parse(t)}catch(e){return null}}
 var base="https://ntfy.sh/sb-"+encodeURIComponent(room),es=null,seen=0;
-function load(){fetch(base+"/json?poll=1&since=12h").then(function(r){return r.text()}).then(function(t){
+// Fetch the newest stored message (used on start and as a backup poll)
+function load(since){fetch(base+"/json?poll=1&since="+(since||"latest")).then(function(r){return r.text()}).then(function(t){
   var last=null;t.trim().split("\n").forEach(function(l){var m=parse(l);if(m&&m.event==="message")last=m.message});
   if(last)draw(parse(last))}).catch(function(){})}
 function connect(){if(es)es.close();seen=Date.now();es=new EventSource(base+"/sse");
   es.onmessage=function(e){seen=Date.now();var m=parse(e.data);if(m&&m.message)draw(parse(m.message))};
-  es.addEventListener("open",function(){seen=Date.now();load()});
+  es.addEventListener("open",function(){seen=Date.now();load("12h")});
   es.addEventListener("keepalive",function(){seen=Date.now()})}
 var DEMO={a:0,b:0,p:1,na:"Team A",nb:"Team B",ev:"Event name",rd:"Round | Stage"};
 // no room code, or nothing received yet: show the board with placeholder text instead of a blank page
 if(!room)draw(DEMO);
 else setTimeout(function(){if($("bd").classList.contains("off"))draw(DEMO)},2500);
-if(room){load();connect();
-  setInterval(function(){if(Date.now()-seen>90000)connect()},15000);
+if(room){load("12h");connect();
+  setInterval(load,5000); // backup poll: catches anything SSE misses
+  setInterval(function(){if(Date.now()-seen>30000)connect()},10000);
   document.addEventListener("visibilitychange",function(){if(!document.hidden){load();connect()}});
   addEventListener("online",function(){load();connect()})}
 try{var bc=new BroadcastChannel("sb-"+room);bc.onmessage=function(e){draw(e.data)}}catch(e){}
