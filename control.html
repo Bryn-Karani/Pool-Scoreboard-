@@ -1,142 +1,107 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Pool Scoreboard Control</title>
 <style>
-*{box-sizing:border-box}
-html,body{margin:0;min-height:100%;background:#070b11;color:#fff;font-family:Arial,Helvetica,sans-serif}
-body{padding:18px}
-.app{max-width:760px;margin:auto}
-.header{
-  background:linear-gradient(180deg,#121a26,#080d14);
-  border:1px solid rgba(255,255,255,.12);
-  border-radius:12px;
-  padding:18px 20px;
-  margin-bottom:14px;
-  box-shadow:0 8px 24px rgba(0,0,0,.25)
-}
-.title{font-size:22px;font-weight:900;letter-spacing:.4px}
-.subtitle{font-size:12px;color:#9da8b7;margin-top:5px}
-.section{
-  background:#0d131c;
-  border:1px solid rgba(255,255,255,.10);
-  border-radius:12px;
-  padding:14px;
-  margin-bottom:14px
-}
-.section-title{
-  font-size:12px;font-weight:900;letter-spacing:1px;
-  color:#aeb8c6;margin:2px 2px 10px
-}
-label{display:block;font-size:11px;font-weight:800;color:#9da8b7;margin:10px 2px 6px}
-input{
-  width:100%;height:48px;border:1px solid #293442;border-radius:9px;
-  background:#080d14;color:#fff;padding:0 13px;font-size:16px;font-weight:700;
-  outline:none
-}
-input:focus{border-color:#1688ff}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.player-card{
-  padding:13px;border-radius:10px;background:#090f17;
-  border:1px solid #26313e
-}
-.player-card.blue{border-top:3px solid #087cff}
-.player-card.red{border-top:3px solid #ef173e}
-.player-name{font-size:13px;font-weight:900;margin-bottom:10px}
-.score-display{text-align:center;font-size:42px;font-weight:900;line-height:1;margin:8px 0 12px}
-.buttons{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-button{
-  min-height:46px;border:0;border-radius:9px;color:#fff;
-  background:#1a2431;font-size:17px;font-weight:900
-}
-button:active{transform:scale(.98)}
-.plus{background:#087cff}
-.minus{background:#27313e}
-.redplus{background:#ef173e}
-.action-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.action-row button{font-size:14px}
-.primary{background:#087cff}
-.danger{background:#9f1830}
-.neutral{background:#1a2431}
-.status{
-  text-align:center;font-size:12px;font-weight:800;color:#7f8c9c;
-  padding-top:5px
-}
-@media(max-width:560px){
-  body{padding:10px}
-  .row{grid-template-columns:1fr}
-  .title{font-size:19px}
-}
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    background:#101216;
+    color:#fff;
+    font-family:Arial,Helvetica,sans-serif;
+    padding:18px;
+  }
+  .wrap{max-width:520px;margin:auto}
+  h1{font-size:22px;margin:0 0 16px;text-align:center}
+  .card{
+    background:#191c22;
+    border:1px solid #30343d;
+    border-radius:16px;
+    padding:16px;
+    margin-bottom:14px;
+  }
+  .label{font-size:12px;color:#9da3ad;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+  input{
+    width:100%;padding:13px 14px;border-radius:10px;
+    border:1px solid #3a3f49;background:#0e1014;color:#fff;
+    font-size:16px;outline:none;margin-bottom:10px;
+  }
+  .players{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .player{text-align:center}
+  .name{font-size:14px;color:#c8ccd3;margin-bottom:8px;min-height:18px}
+  .score{font-size:46px;font-weight:700;margin:4px 0 12px}
+  .buttons{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  button{
+    border:0;border-radius:10px;padding:14px 8px;
+    font-size:18px;font-weight:700;background:#2a2f38;color:#fff;
+  }
+  button:active{transform:scale(.97)}
+  .minus{background:#353a43}
+  .plus{background:#245fba}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .wide{width:100%;margin-top:10px}
+  .danger{background:#8b2d35}
+  .status{text-align:center;color:#8fd18f;font-size:12px;min-height:18px;margin-top:8px}
 </style>
 </head>
 <body>
-<div class="app">
+<div class="wrap">
+  <h1>Pool Scoreboard Control</h1>
 
-  <div class="header">
-    <div class="title">POOL SCOREBOARD CONTROL</div>
-    <div class="subtitle">Remote control • updates the live scoreboard instantly</div>
+  <div class="card">
+    <div class="label">Players</div>
+    <div class="players">
+      <div class="player">
+        <div class="name" id="name1">PLAYER 1</div>
+        <div class="score" id="score1">0</div>
+        <div class="buttons">
+          <button class="minus" onclick="changeScore('s1',-1)">−1</button>
+          <button class="plus" onclick="changeScore('s1',1)">+1</button>
+        </div>
+      </div>
+      <div class="player">
+        <div class="name" id="name2">PLAYER 2</div>
+        <div class="score" id="score2">0</div>
+        <div class="buttons">
+          <button class="minus" onclick="changeScore('s2',-1)">−1</button>
+          <button class="plus" onclick="changeScore('s2',1)">+1</button>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="section">
-    <div class="section-title">PLAYERS & SCORES</div>
+  <div class="card">
+    <div class="label">Player Names</div>
+    <input id="inputName1" placeholder="Player 1 name">
+    <input id="inputName2" placeholder="Player 2 name">
+    <button class="wide plus" onclick="saveNames()">Update Names</button>
+  </div>
+
+  <div class="card">
+    <div class="label">Frame</div>
     <div class="row">
-      <div class="player-card blue">
-        <div class="player-name">PLAYER 1</div>
-        <input id="p1" value="CEASER CHANDIGA">
-        <div class="score-display" id="s1Display">2</div>
-        <div class="buttons">
-          <button class="minus" id="s1Minus">−1</button>
-          <button class="plus" id="s1Plus">+1</button>
-        </div>
-      </div>
-
-      <div class="player-card red">
-        <div class="player-name">PLAYER 2</div>
-        <input id="p2" value="ASIKU JUNIOR">
-        <div class="score-display" id="s2Display">2</div>
-        <div class="buttons">
-          <button class="minus" id="s2Minus">−1</button>
-          <button class="redplus" id="s2Plus">+1</button>
-        </div>
-      </div>
+      <button onclick="changeFrame(-1)">−1 Frame</button>
+      <button class="plus" onclick="changeFrame(1)">+1 Frame</button>
     </div>
+    <button class="wide plus" onclick="nextFrame()">Next Frame / Reset Points</button>
+    <button class="wide danger" onclick="resetPoints()">Reset Points</button>
   </div>
 
-  <div class="section">
-    <div class="section-title">MATCH INFORMATION</div>
-    <label>FRAME</label>
-    <div class="action-row">
-      <button class="minus" id="frameMinus">− FRAME</button>
-      <button class="plus" id="framePlus">+ FRAME</button>
-    </div>
-
-    <label>COMPETITION</label>
-    <input id="status" value="DA VILLE DOUBLE LIFE COMP">
-
-    <label>MATCH / STAGE</label>
-    <input id="match" value="SEMI FINAL | LIFE 2">
+  <div class="card">
+    <div class="label">Match Information</div>
+    <input id="eventInput" placeholder="Competition">
+    <input id="matchInput" placeholder="Match / Round">
+    <button class="wide plus" onclick="saveMatchInfo()">Update Match Info</button>
+    <button class="wide danger" onclick="resetMatch()">Reset Match</button>
+    <div class="status" id="status"></div>
   </div>
-
-  <div class="section">
-    <div class="section-title">MATCH ACTIONS</div>
-    <div class="action-row">
-      <button class="primary" id="nextFrame">NEXT FRAME</button>
-      <button class="neutral" id="resetPoints">RESET POINTS</button>
-    </div>
-    <div style="height:10px"></div>
-    <button class="danger" id="resetAll" style="width:100%">RESET MATCH</button>
-  </div>
-
-  <div class="status" id="connection">Connecting…</div>
 </div>
 
 <script type="module">
-import { initializeApp }
-  from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-import { getDatabase, ref, onValue, set }
-  from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import { getDatabase, ref, onValue, update } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBjxhhz_OJBayYsnbmmfNlzKrpM3rUZ1f4",
@@ -151,62 +116,87 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-const room = ref(db, "poolScoreboard/room1");
+const roomRef = ref(db, "poolScoreboard/room1");
 
 let state = {
-  p1:"CEASER CHANDIGA", p2:"ASIKU JUNIOR",
-  s1:2, s2:2, frame:6,
-  status:"DA VILLE DOUBLE LIFE COMP",
+  p1:"PLAYER 1", p2:"PLAYER 2", s1:0, s2:0,
+  frame:1, event:"DA VILLE DOUBLE LIFE COMP",
   match:"SEMI FINAL | LIFE 2"
 };
 
-const $ = id => document.getElementById(id);
-
-function render(){
-  $("p1").value=state.p1;
-  $("p2").value=state.p2;
-  $("s1Display").textContent=state.s1;
-  $("s2Display").textContent=state.s2;
-  $("status").value=state.status;
-  $("match").value=state.match;
+function showStatus(msg){
+  const el=document.getElementById("status");
+  el.textContent=msg;
+  clearTimeout(showStatus.t);
+  showStatus.t=setTimeout(()=>el.textContent="",1500);
 }
 
-async function save(){
-  await set(room,state);
-}
+onValue(roomRef, snap=>{
+  const d=snap.val() || {};
+  state={...state,...d};
 
-onValue(room,snap=>{
-  const d=snap.val();
-  if(d) state={...state,...d};
-  render();
-  $("connection").textContent="● LIVE — connected to scoreboard";
+  document.getElementById("name1").textContent=state.p1 || "PLAYER 1";
+  document.getElementById("name2").textContent=state.p2 || "PLAYER 2";
+  document.getElementById("score1").textContent=Number(state.s1)||0;
+  document.getElementById("score2").textContent=Number(state.s2)||0;
+
+  document.getElementById("inputName1").value=state.p1 || "";
+  document.getElementById("inputName2").value=state.p2 || "";
+  document.getElementById("eventInput").value=state.event || "";
+  document.getElementById("matchInput").value=state.match || "";
 });
 
-function bind(id,fn){
-  $(id).addEventListener("click",async()=>{
-    fn();
-    render();
-    await save();
-  });
+async function safeUpdate(data,msg){
+  try{
+    await update(roomRef,data);
+    showStatus(msg);
+  }catch(e){
+    showStatus("Update failed");
+    console.error(e);
+  }
 }
 
-$("p1").addEventListener("change",async e=>{state.p1=e.target.value.trim()||"PLAYER 1";await save()});
-$("p2").addEventListener("change",async e=>{state.p2=e.target.value.trim()||"PLAYER 2";await save()});
-$("status").addEventListener("change",async e=>{state.status=e.target.value;await save()});
-$("match").addEventListener("change",async e=>{state.match=e.target.value;await save()});
+window.changeScore=(field,amount)=>{
+  const current=Number(state[field])||0;
+  safeUpdate({[field]:Math.max(0,current+amount)}, "Score updated");
+};
 
-bind("s1Plus",()=>state.s1++);
-bind("s1Minus",()=>state.s1=Math.max(0,state.s1-1));
-bind("s2Plus",()=>state.s2++);
-bind("s2Minus",()=>state.s2=Math.max(0,state.s2-1));
-bind("framePlus",()=>state.frame++);
-bind("frameMinus",()=>state.frame=Math.max(1,state.frame-1));
+window.saveNames=()=>{
+  safeUpdate({
+    p1:document.getElementById("inputName1").value.trim() || "PLAYER 1",
+    p2:document.getElementById("inputName2").value.trim() || "PLAYER 2"
+  },"Names updated");
+};
 
-bind("resetPoints",()=>{state.s1=0;state.s2=0});
-bind("nextFrame",()=>{state.s1=0;state.s2=0;state.frame++});
-bind("resetAll",()=>{state={...state,s1:0,s2:0,frame:1}});
+window.changeFrame=(amount)=>{
+  const current=Number(state.frame)||1;
+  safeUpdate({frame:Math.max(1,current+amount)},"Frame updated");
+};
 
-render();
+window.resetPoints=()=>{
+  safeUpdate({s1:0,s2:0},"Points reset");
+};
+
+window.nextFrame=()=>{
+  const current=Number(state.frame)||1;
+  safeUpdate({frame:current+1,s1:0,s2:0},"Next frame");
+};
+
+window.saveMatchInfo=()=>{
+  safeUpdate({
+    event:document.getElementById("eventInput").value.trim(),
+    match:document.getElementById("matchInput").value.trim()
+  },"Match info updated");
+};
+
+window.resetMatch=()=>{
+  safeUpdate({
+    s1:0,s2:0,frame:1,
+    p1:"PLAYER 1",p2:"PLAYER 2",
+    event:"DA VILLE DOUBLE LIFE COMP",
+    match:"SEMI FINAL | LIFE 2"
+  },"Match reset");
+};
 </script>
 </body>
 </html>
