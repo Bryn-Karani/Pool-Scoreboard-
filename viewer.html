@@ -4,20 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Pool Scoreboard</title><style>
-:root{
-  --blue:#1683ff;
-  --red:#ef3d4f;
-  --bg:#0b0e13;
-  --panel:#151a22;
-  --panel2:#0f1319;
-  --muted:#8993a3;
-  --line:#29303b;
-  --white:#fff;
-}
-
-*{box-sizing:border-box}
-
+<title>Premium Pool Scoreboard</title><style>
 html,body{
   margin:0;
   width:100%;
@@ -30,7 +17,6 @@ body{
   display:flex;
   align-items:flex-end;
   justify-content:center;
-  font-family:Arial,Helvetica,sans-serif;
 }
 
 svg{
@@ -38,135 +24,265 @@ svg{
   width:100%;
   height:auto;
   max-width:1200px;
-  overflow:visible;
   shape-rendering:geometricPrecision;
   text-rendering:geometricPrecision;
 }
 
 text{
-  font-family:Arial,Helvetica,sans-serif;
+  font-family:Georgia,"Times New Roman",serif;
   font-weight:700;
-  fill:var(--white);
+  fill:#f5f1e7;
 }
 
 .player{
+  font-family:Georgia,"Times New Roman",serif;
   font-size:29px;
-  letter-spacing:.2px;
+  letter-spacing:.3px;
 }
 
 .score{
-  font-size:54px;
-  font-weight:800;
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:56px;
+  font-weight:700;
 }
 
 .frame{
-  font-size:12px;
-  letter-spacing:1.5px;
-  fill:#9da7b6;
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:2px;
+  fill:#c8b77b;
 }
 
 .meta{
-  font-size:13px;
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:12px;
   font-weight:600;
-  letter-spacing:.6px;
-}
-
-.badge{
-  font-size:10px;
-  font-weight:800;
   letter-spacing:1px;
 }
 
-.live{
-  font-size:11px;
-  font-weight:800;
-  letter-spacing:1.5px;
+.club{
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:3px;
 }
 
-.nameDot{
-  filter:url(#shadow);
+.live{
+  font-family:Arial,Helvetica,sans-serif;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:1.5px;
 }
 </style></head><body><svg
 viewBox="0 0 1200 158"
 preserveAspectRatio="xMidYMax meet"
 role="img"
-aria-label="Live pool scoreboard"
+aria-label="Premium live pool scoreboard"
 
 «»
 
-<defs>
-  <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-    <feDropShadow
-      dx="0"
-      dy="2"
-      stdDeviation="2"
-      flood-opacity=".45"
-    />
-  </filter>  <linearGradient id="mainBg" x1="0" x2="0" y1="0" y2="1">
-    <stop offset="0" stop-color="#181d25"/>
-    <stop offset="1" stop-color="#10141b"/>
-  </linearGradient>  <linearGradient id="footerBg" x1="0" x2="1">
-    <stop offset="0" stop-color="#0b0e13"/>
-    <stop offset=".5" stop-color="#11151c"/>
-    <stop offset="1" stop-color="#0b0e13"/>
-  </linearGradient>
-</defs><!-- Main scoreboard --><rect
+<defs>  <!-- Main club panel -->  <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#171914"/>
+    <stop offset=".48" stop-color="#11130f"/>
+    <stop offset="1" stop-color="#0a0c09"/>
+  </linearGradient>  <!-- Score panel -->  <linearGradient id="scorePanel" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#20231c"/>
+    <stop offset="1" stop-color="#0d0f0c"/>
+  </linearGradient>  <!-- Gold -->  <linearGradient id="gold" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#8c7135"/>
+    <stop offset=".5" stop-color="#e1c777"/>
+    <stop offset="1" stop-color="#92773b"/>
+  </linearGradient>  <!-- Felt green -->  <linearGradient id="felt" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#173d2d"/>
+    <stop offset=".5" stop-color="#235b42"/>
+    <stop offset="1" stop-color="#173d2d"/>
+  </linearGradient><filter id="shadow"
+x="-30%"
+y="-30%"
+width="160%"
+height="160%">
+<feDropShadow
+dx="0"
+dy="3"
+stdDeviation="4"
+flood-color="#000"
+flood-opacity=".65"
+/>
+</filter>
+
+</defs><!-- ================================================= --><!-- MAIN CLUB BOARD --><!-- ================================================= --><rect
 x="0"
 y="0"
 width="1200"
 height="112"
-rx="6"
-fill="url(#mainBg)"
+rx="5"
+fill="url(#panel)"
+filter="url(#shadow)"
 />
 
-<!-- Player accent bars --><rect x="0" y="0" width="8" height="112" rx="3" fill="#1683ff"/>
-<rect x="1192" y="0" width="8" height="112" rx="3" fill="#ef3d4f"/><!-- Subtle top line --><rect x="8" y="0" width="1184" height="2" fill="#ffffff" opacity=".06"/><!-- Player names --><text id="p1" class="player" x="38" y="67" text-anchor="start"></text>
-<text id="p2" class="player" x="1162" y="67" text-anchor="end"></text>
+<!-- Fine gold border --><rect
+x="1"
+y="1"
+width="1198"
+height="110"
+rx="4"
+fill="none"
+stroke="url(#gold)"
+stroke-width="1"
+/>
 
-<!-- Player color indicators --><circle
-class="nameDot"
-cx="25"
-cy="57"
+<!-- Inner border --><rect
+x="8"
+y="8"
+width="1184"
+height="96"
+rx="2"
+fill="none"
+stroke="#6e633e"
+stroke-opacity=".35"
+stroke-width="1"
+/>
+
+<!-- ================================================= --><!-- PLAYER SIDE ACCENTS --><!-- ================================================= --><rect
+x="9"
+y="9"
+width="4"
+height="94"
+fill="url(#felt)"
+/>
+
+<rect
+x="1187"
+y="9"
+width="4"
+height="94"
+fill="url(#felt)"
+/>
+
+<!-- Player markers --><circle
+cx="32"
+cy="55"
 r="5"
-fill="#1683ff"
+fill="#c9ac5b"
 />
 
 <circle
-class="nameDot"
-cx="1175"
-cy="57"
+cx="1168"
+cy="55"
 r="5"
-fill="#ef3d4f"
+fill="#c9ac5b"
 />
 
-<!-- Score center --><rect
-x="455"
-y="15"
-width="290"
-height="76"
-rx="10"
-fill="#0b0e13"
-stroke="#2a313c"
+<!-- ================================================= --><!-- PLAYER NAMES --><!-- ================================================= --><text
+id="p1"
+class="player"
+x="50"
+y="65"
+text-anchor="start"
+
+«»
+
+</text><text
+id="p2"
+class="player"
+x="1150"
+y="65"
+text-anchor="end"
+
+«»
+
+</text><!-- ================================================= --><!-- CENTER SCORE MODULE --><!-- ================================================= --><rect
+x="447"
+y="12"
+width="306"
+height="82"
+rx="7"
+fill="url(#scorePanel)"
+stroke="#70613a"
+stroke-opacity=".7"
 stroke-width="1"
 />
 
-<!-- Scores --><text id="s1" class="score" x="515" y="69" text-anchor="middle">0</text>
-<text id="s2" class="score" x="685" y="69" text-anchor="middle">0</text>
+<!-- Gold top accent --><rect
+x="482"
+y="12"
+width="236"
+height="2"
+fill="url(#gold)"
+/>
 
-<!-- Divider --><line
+<!-- Scores --><text
+id="s1"
+class="score"
+x="515"
+y="69"
+text-anchor="middle"
+
+«»
+
+0
+</text>
+
+<text
+id="s2"
+class="score"
+x="685"
+y="69"
+text-anchor="middle"
+
+«»
+
+0
+</text>
+
+<!-- Center divider --><line
 x1="600"
-y1="29"
+y1="30"
 x2="600"
 y2="78"
-stroke="#343b47"
+stroke="#8c7944"
+stroke-opacity=".6"
 stroke-width="1"
 />
 
-<!-- Frame --><text
+<!-- ================================================= --><!-- 8 BALL EMBLEM --><!-- ================================================= --><circle
+cx="600"
+cy="30"
+r="13"
+fill="#050605"
+stroke="#d3b967"
+stroke-width="1"
+/>
+
+<circle
+cx="600"
+cy="30"
+r="8"
+fill="#f3f0e8"
+/>
+
+<text
+x="600"
+y="34"
+text-anchor="middle"
+style="
+font-family:Arial,Helvetica,sans-serif;
+font-size:8px;
+font-weight:800;
+fill:#111;
+"
+
+«»
+
+8
+</text>
+
+<!-- ================================================= --><!-- FRAME --><!-- ================================================= --><text
 id="fr"
 class="frame"
 x="600"
-y="104"
+y="106"
 text-anchor="middle"
 
 «»
@@ -174,112 +290,67 @@ text-anchor="middle"
 FRAME 1
 </text>
 
-<!-- 8-ball --><circle
-cx="600"
-cy="52"
-r="17"
-fill="#f4f4f4"
-opacity=".95"
+<!-- ================================================= --><!-- FOOTER --><!-- ================================================= --><rect
+x="0"
+y="112"
+width="1200"
+height="46"
+fill="#080a08"
 />
 
-<circle
-cx="600"
-cy="52"
-r="11"
-fill="#111318"
+<rect
+x="0"
+y="112"
+width="1200"
+height="1"
+fill="url(#gold)"
+opacity=".7"
 />
 
-<text
-x="600"
-y="55"
-text-anchor="middle"
-class="badge"
-fill="#fff"
+<!-- Left club branding --><text
+x="27"
+y="137"
+class="club"
+fill="#c9ac5b"
 
 «»
 
-8
+BILLIARDS
 </text>
 
-<!-- Live indicator --><circle cx="28" cy="128" r="4" fill="#2ee67b"/><text
-x="39"
-y="132"
+<text
+x="27"
+y="149"
 class="live"
-fill="#2ee67b"
+fill="#6eaa83"
 
 «»
 
-LIVE
+● LIVE MATCH
 </text>
 
 <!-- Event --><text
 id="ev"
 class="meta"
-x="105"
-y="132"
-text-anchor="start"
-fill="#d8dde5"
-
-«</text>»
-
-<!-- Match --><text
-id="ma"
-class="meta"
-x="1170"
-y="132"
-text-anchor="end"
-fill="#9da7b6"
-
-«</text>»
-
-<!-- Footer --><rect
-x="0"
-y="112"
-width="1200"
-height="46"
-fill="url(#footerBg)"
-/>
-
-<line
-x1="0"
-y1="112"
-x2="1200"
-y2="112"
-stroke="#29303b"
-stroke-width="1"
-/>
-
-<!-- Reposition footer labels over footer --><text
-x="28"
-y="139"
-class="meta"
-fill="#2ee67b"
+x="600"
+y="137"
+text-anchor="middle"
+fill="#ddd7c7"
 
 «»
 
-● LIVE
-</text>
-
-<text
-id="ev2"
-x="112"
-y="139"
+</text><!-- Match --><text
+id="ma"
 class="meta"
-fill="#d8dde5"
-
-«</text>»
-
-<text
-id="ma2"
-x="1170"
-y="139"
-class="meta"
+x="1172"
+y="137"
 text-anchor="end"
-fill="#9da7b6"
+fill="#aaa58f"
 
-«</text>»
+«»
 
-</svg><script type="module">
+</text><!-- Small gold endpoint ornaments --><circle cx="11" cy="137" r="2" fill="#c9ac5b"/>
+<circle cx="1189" cy="137" r="2" fill="#c9ac5b"/></svg><script type="module">
 
 import {
   initializeApp
@@ -290,6 +361,11 @@ import {
   ref,
   onValue
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+
+
+/* =====================================================
+   FIREBASE
+===================================================== */
 
 const firebaseConfig = {
   apiKey: "AIzaSyBjxhhz_OJBayYsnbmmfNlzKrpM3rUZ1f4",
@@ -303,43 +379,51 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+
 const db = getDatabase(app);
 
-const scoreboardRef = ref(db, "poolScoreboard/room1");
+const scoreboardRef =
+  ref(db, "poolScoreboard/room1");
 
-const $ = id => document.getElementById(id);
 
-function setText(id, value){
-  $(id).textContent = value;
-}
+/* =====================================================
+   DOM HELPER
+===================================================== */
+
+const $ = id =>
+  document.getElementById(id);
+
+
+/* =====================================================
+   LIVE SCOREBOARD
+===================================================== */
 
 onValue(scoreboardRef, snapshot => {
 
-  const d = snapshot.val() || {};
+  const data = snapshot.val() || {};
 
-  const p1 = d.p1 ?? "";
-  const p2 = d.p2 ?? "";
+  $("p1").textContent =
+    data.p1 ?? "";
 
-  const s1 = Number(d.s1 ?? 0);
-  const s2 = Number(d.s2 ?? 0);
+  $("p2").textContent =
+    data.p2 ?? "";
 
-  const frame = Number(d.frame ?? 1);
+  $("s1").textContent =
+    Number(data.s1 ?? 0);
 
-  const event = d.event ?? "";
-  const match = d.match ?? "";
+  $("s2").textContent =
+    Number(data.s2 ?? 0);
 
-  setText("p1", p1);
-  setText("p2", p2);
+  $("fr").textContent =
+    "FRAME " + Number(data.frame ?? 1);
 
-  setText("s1", s1);
-  setText("s2", s2);
+  $("ev").textContent =
+    data.event ?? "";
 
-  setText("fr", `FRAME ${frame}`);
-
-  setText("ev2", event);
-  setText("ma2", match);
+  $("ma").textContent =
+    data.match ?? "";
 
 });
 
 </script></body>
-</html>
+  </html>
