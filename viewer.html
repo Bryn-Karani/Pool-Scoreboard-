@@ -1,30 +1,345 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Pool Scoreboard</title><style>
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:transparent}
-body{display:flex;align-items:flex-end;justify-content:center}
-svg{display:block;width:100%;height:auto;max-width:1100px;shape-rendering:geometricPrecision;text-rendering:geometricPrecision}
-text{font-family:Arial,Helvetica,sans-serif;font-weight:700;fill:#fff}
-.name{font-size:28px}.score{font-size:48px}.small{font-size:14px;letter-spacing:.5px}.frame{font-size:13px;fill:#aeb4bd}
-</style></head><body>
-<svg viewBox="0 0 1100 150" preserveAspectRatio="xMidYMax meet" role="img" aria-label="Live pool scoreboard">
-<rect x="0" y="0" width="1100" height="150" fill="transparent"/>
-<rect x="0" y="0" width="1100" height="105" rx="3" fill="#111318"/>
-<rect x="0" y="0" width="7" height="105" fill="#2375d8"/>
-<rect x="1093" y="0" width="7" height="105" fill="#d9363e"/>
-<rect x="0" y="105" width="1100" height="45" fill="#08090b"/>
-<text id="p1" class="name" x="28" y="64" text-anchor="start"></text>
-<text id="p2" class="name" x="1072" y="64" text-anchor="end"></text>
-<text id="s1" class="score" x="450" y="69" text-anchor="middle">0</text>
-<text id="s2" class="score" x="650" y="69" text-anchor="middle">0</text>
-<text id="fr" class="frame" x="550" y="69" text-anchor="middle">FRAME 1</text>
-<text id="ev" class="small" x="24" y="133" text-anchor="start"></text>
-<circle cx="550" cy="127" r="13" fill="#f2f2f2"/><text x="550" y="132" text-anchor="middle" style="font-size:10px;fill:#111">8</text>
-<text id="ma" class="small" x="1076" y="133" text-anchor="end"></text>
-</svg>
-<script type="module">
-import{initializeApp}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-import{getDatabase,ref,onValue}from"https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
-const firebaseConfig={apiKey:"AIzaSyBjxhhz_OJBayYsnbmmfNlzKrpM3rUZ1f4",authDomain:"pool-scoreboard-71c93.firebaseapp.com",databaseURL:"https://pool-scoreboard-71c93-default-rtdb.firebaseio.com",projectId:"pool-scoreboard-71c93",storageBucket:"pool-scoreboard-71c93.firebasestorage.app",messagingSenderId:"401721132284",appId:"1:401721132284:web:65b755b148d1163a7a4379",measurementId:"G-FPBCYM0H1Z"};
-const db=getDatabase(initializeApp(firebaseConfig)),r=ref(db,"poolScoreboard/room1");
-const $=id=>document.getElementById(id);
-onValue(r,s=>{const d=s.val()||{};$("p1").textContent=d.p1??"";$("p2").textContent=d.p2??"";$("s1").textContent=Number(d.s1??0);$("s2").textContent=Number(d.s2??0);$("fr").textContent="FRAME "+Number(d.frame??1);$("ev").textContent=d.event??"";$("ma").textContent=d.match??""});
-</script></body></html>
+<!doctype html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Pool Scoreboard</title><style>
+:root{
+  --blue:#1683ff;
+  --red:#ef3d4f;
+  --bg:#0b0e13;
+  --panel:#151a22;
+  --panel2:#0f1319;
+  --muted:#8993a3;
+  --line:#29303b;
+  --white:#fff;
+}
+
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:transparent;
+}
+
+body{
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+svg{
+  display:block;
+  width:100%;
+  height:auto;
+  max-width:1200px;
+  overflow:visible;
+  shape-rendering:geometricPrecision;
+  text-rendering:geometricPrecision;
+}
+
+text{
+  font-family:Arial,Helvetica,sans-serif;
+  font-weight:700;
+  fill:var(--white);
+}
+
+.player{
+  font-size:29px;
+  letter-spacing:.2px;
+}
+
+.score{
+  font-size:54px;
+  font-weight:800;
+}
+
+.frame{
+  font-size:12px;
+  letter-spacing:1.5px;
+  fill:#9da7b6;
+}
+
+.meta{
+  font-size:13px;
+  font-weight:600;
+  letter-spacing:.6px;
+}
+
+.badge{
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:1px;
+}
+
+.live{
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:1.5px;
+}
+
+.nameDot{
+  filter:url(#shadow);
+}
+</style></head><body><svg
+viewBox="0 0 1200 158"
+preserveAspectRatio="xMidYMax meet"
+role="img"
+aria-label="Live pool scoreboard"
+
+«»
+
+<defs>
+  <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+    <feDropShadow
+      dx="0"
+      dy="2"
+      stdDeviation="2"
+      flood-opacity=".45"
+    />
+  </filter>  <linearGradient id="mainBg" x1="0" x2="0" y1="0" y2="1">
+    <stop offset="0" stop-color="#181d25"/>
+    <stop offset="1" stop-color="#10141b"/>
+  </linearGradient>  <linearGradient id="footerBg" x1="0" x2="1">
+    <stop offset="0" stop-color="#0b0e13"/>
+    <stop offset=".5" stop-color="#11151c"/>
+    <stop offset="1" stop-color="#0b0e13"/>
+  </linearGradient>
+</defs><!-- Main scoreboard --><rect
+x="0"
+y="0"
+width="1200"
+height="112"
+rx="6"
+fill="url(#mainBg)"
+/>
+
+<!-- Player accent bars --><rect x="0" y="0" width="8" height="112" rx="3" fill="#1683ff"/>
+<rect x="1192" y="0" width="8" height="112" rx="3" fill="#ef3d4f"/><!-- Subtle top line --><rect x="8" y="0" width="1184" height="2" fill="#ffffff" opacity=".06"/><!-- Player names --><text id="p1" class="player" x="38" y="67" text-anchor="start"></text>
+<text id="p2" class="player" x="1162" y="67" text-anchor="end"></text>
+
+<!-- Player color indicators --><circle
+class="nameDot"
+cx="25"
+cy="57"
+r="5"
+fill="#1683ff"
+/>
+
+<circle
+class="nameDot"
+cx="1175"
+cy="57"
+r="5"
+fill="#ef3d4f"
+/>
+
+<!-- Score center --><rect
+x="455"
+y="15"
+width="290"
+height="76"
+rx="10"
+fill="#0b0e13"
+stroke="#2a313c"
+stroke-width="1"
+/>
+
+<!-- Scores --><text id="s1" class="score" x="515" y="69" text-anchor="middle">0</text>
+<text id="s2" class="score" x="685" y="69" text-anchor="middle">0</text>
+
+<!-- Divider --><line
+x1="600"
+y1="29"
+x2="600"
+y2="78"
+stroke="#343b47"
+stroke-width="1"
+/>
+
+<!-- Frame --><text
+id="fr"
+class="frame"
+x="600"
+y="104"
+text-anchor="middle"
+
+«»
+
+FRAME 1
+</text>
+
+<!-- 8-ball --><circle
+cx="600"
+cy="52"
+r="17"
+fill="#f4f4f4"
+opacity=".95"
+/>
+
+<circle
+cx="600"
+cy="52"
+r="11"
+fill="#111318"
+/>
+
+<text
+x="600"
+y="55"
+text-anchor="middle"
+class="badge"
+fill="#fff"
+
+«»
+
+8
+</text>
+
+<!-- Live indicator --><circle cx="28" cy="128" r="4" fill="#2ee67b"/><text
+x="39"
+y="132"
+class="live"
+fill="#2ee67b"
+
+«»
+
+LIVE
+</text>
+
+<!-- Event --><text
+id="ev"
+class="meta"
+x="105"
+y="132"
+text-anchor="start"
+fill="#d8dde5"
+
+«</text>»
+
+<!-- Match --><text
+id="ma"
+class="meta"
+x="1170"
+y="132"
+text-anchor="end"
+fill="#9da7b6"
+
+«</text>»
+
+<!-- Footer --><rect
+x="0"
+y="112"
+width="1200"
+height="46"
+fill="url(#footerBg)"
+/>
+
+<line
+x1="0"
+y1="112"
+x2="1200"
+y2="112"
+stroke="#29303b"
+stroke-width="1"
+/>
+
+<!-- Reposition footer labels over footer --><text
+x="28"
+y="139"
+class="meta"
+fill="#2ee67b"
+
+«»
+
+● LIVE
+</text>
+
+<text
+id="ev2"
+x="112"
+y="139"
+class="meta"
+fill="#d8dde5"
+
+«</text>»
+
+<text
+id="ma2"
+x="1170"
+y="139"
+class="meta"
+text-anchor="end"
+fill="#9da7b6"
+
+«</text>»
+
+</svg><script type="module">
+
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+
+import {
+  getDatabase,
+  ref,
+  onValue
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBjxhhz_OJBayYsnbmmfNlzKrpM3rUZ1f4",
+  authDomain: "pool-scoreboard-71c93.firebaseapp.com",
+  databaseURL: "https://pool-scoreboard-71c93-default-rtdb.firebaseio.com",
+  projectId: "pool-scoreboard-71c93",
+  storageBucket: "pool-scoreboard-71c93.firebasestorage.app",
+  messagingSenderId: "401721132284",
+  appId: "1:401721132284:web:65b755b148d1163a7a4379",
+  measurementId: "G-FPBCYM0H1Z"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const scoreboardRef = ref(db, "poolScoreboard/room1");
+
+const $ = id => document.getElementById(id);
+
+function setText(id, value){
+  $(id).textContent = value;
+}
+
+onValue(scoreboardRef, snapshot => {
+
+  const d = snapshot.val() || {};
+
+  const p1 = d.p1 ?? "";
+  const p2 = d.p2 ?? "";
+
+  const s1 = Number(d.s1 ?? 0);
+  const s2 = Number(d.s2 ?? 0);
+
+  const frame = Number(d.frame ?? 1);
+
+  const event = d.event ?? "";
+  const match = d.match ?? "";
+
+  setText("p1", p1);
+  setText("p2", p2);
+
+  setText("s1", s1);
+  setText("s2", s2);
+
+  setText("fr", `FRAME ${frame}`);
+
+  setText("ev2", event);
+  setText("ma2", match);
+
+});
+
+</script></body>
+</html>
