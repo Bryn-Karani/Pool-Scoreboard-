@@ -2,170 +2,245 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Pool Scoreboard Overlay</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Pool Scoreboard</title>
+
 <style>
 *{box-sizing:border-box}
-html,body{margin:0;width:100%;height:100%;background:transparent;overflow:hidden}
-body{font-family:Arial,Helvetica,sans-serif;color:#fff}
-
-.wrap{
-  position:absolute;
-  left:2.5vw;
-  right:2.5vw;
-  bottom:2.5vh;
-  height:auto;
-  z-index:10;
-  filter:drop-shadow(0 5px 10px rgba(0,0,0,.45));
-}
-
-.event{
-  position:absolute;
-  left:1.5%;
-  bottom:calc(100% + 5px);
-  font-size:clamp(9px,1.1vw,15px);
-  font-weight:800;
-  letter-spacing:1px;
-  opacity:.9;
-  white-space:nowrap;
-}
-
-.main{
-  width:100%;
-  min-height:clamp(54px,10vh,100px);
-  display:grid;
-  grid-template-columns:minmax(0,1fr) minmax(130px,20vw) minmax(0,1fr);
-  align-items:stretch;
-  background:linear-gradient(180deg,#111722,#070b12);
-  border:1px solid rgba(255,255,255,.16);
-  border-bottom:0;
-  border-radius:8px 8px 0 0;
+html,body{
+  margin:0;width:100%;height:100%;
+  background:transparent;
   overflow:hidden;
+  font-family:Arial,Helvetica,sans-serif;
+}
+body{color:#fff}
+
+/* The overlay is transparent everywhere except the scoreboard. */
+.scoreboard{
+  position:absolute;
+  left:3.4%;
+  right:3.4%;
+  bottom:2.0%;
+  color:#fff;
+}
+
+/* Main broadcast bar */
+.mainbar{
+  position:relative;
+  height:clamp(62px,10.2vw,112px);
+  display:grid;
+  grid-template-columns:minmax(0,1fr) clamp(150px,24%,320px) minmax(0,1fr);
+  background:
+    linear-gradient(180deg,rgba(14,21,31,.98),rgba(5,9,15,.98));
+  border:1px solid rgba(255,255,255,.10);
+  border-bottom:0;
+  overflow:hidden;
+}
+
+/* Blue/red angular edge accents */
+.mainbar:before,
+.mainbar:after{
+  content:"";
+  position:absolute;
+  top:0;bottom:0;
+  width:12px;
+  pointer-events:none;
+}
+.mainbar:before{
+  left:0;
+  background:#087cff;
+  clip-path:polygon(0 0,100% 0,65% 100%,0 100%);
+}
+.mainbar:after{
+  right:0;
+  background:#ef173e;
+  clip-path:polygon(0 0,100% 0,100% 100%,35% 100%);
 }
 
 .player{
   min-width:0;
   display:flex;
   align-items:center;
-  font-size:clamp(13px,2.2vw,30px);
-  font-weight:800;
-  letter-spacing:.7px;
+  height:100%;
+  padding:0 clamp(18px,2.6vw,42px);
+  font-size:clamp(16px,2.15vw,30px);
+  line-height:1;
+  font-weight:900;
+  letter-spacing:.25px;
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
-  padding:0 clamp(12px,2.2vw,30px);
+  text-shadow:0 2px 4px rgba(0,0,0,.6);
 }
-
 .p1{
-  justify-content:flex-start;
-  border-left:6px solid #1688ff;
+  justify-content:center;
+  border-bottom:4px solid #087cff;
 }
 .p2{
-  justify-content:flex-end;
-  border-right:6px solid #ef304c;
-  text-align:right;
+  justify-content:center;
+  border-bottom:4px solid #ef173e;
 }
 
-.score{
+.center{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:clamp(12px,2vw,30px);
   min-width:0;
+  height:100%;
+  font-weight:900;
+  background:linear-gradient(180deg,#121a26,#080d14);
+  border-left:1px solid rgba(255,255,255,.12);
+  border-right:1px solid rgba(255,255,255,.12);
+  clip-path:polygon(4% 0,96% 0,88% 100%,12% 100%);
+}
+.center:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-top:3px solid rgba(255,255,255,.08);
+  pointer-events:none;
+}
+.score{
+  font-size:clamp(34px,4.8vw,72px);
+  line-height:1;
+}
+.frame{
+  font-size:clamp(18px,2.5vw,36px);
+  line-height:1;
+}
+
+/* Lower information bar */
+.subbar{
+  height:clamp(30px,4.7vw,54px);
+  display:grid;
+  grid-template-columns:minmax(0,1fr) clamp(42px,6%,72px) minmax(0,1fr);
+  align-items:center;
+  background:rgba(5,9,14,.99);
+  border-top:1px solid rgba(255,255,255,.12);
+  border-left:1px solid rgba(255,255,255,.10);
+  border-right:1px solid rgba(255,255,255,.10);
+  border-bottom:1px solid rgba(255,255,255,.10);
+}
+
+.sub{
+  height:100%;
+  display:flex;
+  align-items:center;
+  font-size:clamp(10px,1.25vw,18px);
+  font-weight:900;
+  letter-spacing:.45px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.sub.left{
+  justify-content:center;
+  border-top:3px solid #087cff;
+}
+.sub.right{
+  justify-content:center;
+  border-top:3px solid #ef173e;
+}
+.ballbox{
   height:100%;
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:clamp(10px,1.8vw,24px);
-  font-size:clamp(30px,6vw,76px);
-  font-weight:900;
-  letter-spacing:1px;
-  border-left:1px solid rgba(255,255,255,.12);
-  border-right:1px solid rgba(255,255,255,.12);
-  white-space:nowrap;
 }
-.score .frames{
-  font-size:clamp(13px,1.8vw,24px);
-  opacity:.9;
-}
-
-.sub{
-  width:100%;
-  min-height:clamp(27px,4.8vh,48px);
-  display:grid;
-  grid-template-columns:minmax(0,1fr) clamp(30px,4vw,48px) minmax(0,1fr);
-  align-items:center;
-  background:rgba(5,8,13,.97);
-  border:1px solid rgba(255,255,255,.12);
-  border-radius:0 0 6px 6px;
-  font-size:clamp(9px,1.25vw,17px);
-  font-weight:800;
-  letter-spacing:.5px;
-}
-
-.left{
-  min-width:0;
-  padding-left:clamp(14px,3vw,48px);
-  text-align:left;
-  border-top:2px solid #1688ff;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-.right{
-  min-width:0;
-  padding-right:clamp(14px,3vw,48px);
-  text-align:right;
-  border-top:2px solid #ef304c;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-.mid{text-align:center;font-size:clamp(12px,1.4vw,18px)}
 .ball{
-  width:clamp(19px,2.8vw,30px);
-  height:clamp(19px,2.8vw,30px);
+  width:clamp(21px,2.7vw,34px);
+  height:clamp(21px,2.7vw,34px);
   border-radius:50%;
-  background:#f5f5f5;
-  color:#111;
-  display:inline-flex;
+  display:flex;
   align-items:center;
   justify-content:center;
+  background:#f7f7f7;
+  color:#111;
+  font-size:clamp(11px,1.25vw,17px);
   font-weight:900;
+  box-shadow:0 1px 3px rgba(0,0,0,.55);
 }
 
+/* Small-screen landscape */
+@media (orientation:landscape) and (max-height:520px){
+  .scoreboard{left:2.8%;right:2.8%;bottom:1.5%}
+  .mainbar{height:clamp(52px,13vh,78px)}
+  .subbar{height:clamp(25px,5.5vh,38px)}
+}
+
+/* Portrait fallback */
 @media (orientation:portrait){
-  .wrap{left:2%;right:2%;bottom:2%}
-  .main{grid-template-columns:minmax(0,1fr) 110px minmax(0,1fr)}
-  .player{font-size:clamp(12px,3.6vw,22px);padding:0 12px}
-  .score{font-size:clamp(28px,8vw,54px);gap:10px}
-  .sub{font-size:clamp(8px,2.4vw,13px)}
-}
-
-@media (orientation:landscape) and (max-height:500px){
-  .wrap{left:2vw;right:2vw;bottom:1.5vh}
-  .main{min-height:clamp(48px,12vh,72px)}
-  .sub{min-height:clamp(24px,5vh,36px)}
-  .event{bottom:calc(100% + 3px)}
+  .scoreboard{left:2%;right:2%;bottom:1.5%}
+  .mainbar{
+    height:clamp(54px,12vw,82px);
+    grid-template-columns:minmax(0,1fr) 120px minmax(0,1fr);
+  }
+  .player{font-size:clamp(12px,3.2vw,21px);padding:0 12px}
+  .score{font-size:clamp(30px,8vw,52px)}
+  .frame{font-size:clamp(15px,4vw,25px)}
+  .sub{font-size:clamp(8px,2.2vw,13px)}
 }
 </style>
 </head>
+
 <body>
-<div class="wrap">
-<div class="event" id="event">POOL COMPETITION</div>
-<div class="main">
-<div class="player p1" id="p1">PLAYER 1</div>
-<div class="score"><span id="s1">0</span><span class="frames">(<span id="frame">1</span>)</span><span id="s2">0</span></div>
-<div class="player p2" id="p2">PLAYER 2</div>
+<div class="scoreboard">
+
+  <div class="mainbar">
+    <div class="player p1" id="p1">CEASER CHANDIGA</div>
+
+    <div class="center">
+      <span class="score" id="s1">2</span>
+      <span class="frame" id="frame">(6)</span>
+      <span class="score" id="s2">2</span>
+    </div>
+
+    <div class="player p2" id="p2">ASIKU JUNIOR</div>
+  </div>
+
+  <div class="subbar">
+    <div class="sub left" id="status">DA VILLE DOUBLE LIFE COMP</div>
+    <div class="ballbox"><div class="ball">8</div></div>
+    <div class="sub right" id="event">SEMI FINAL&nbsp; | &nbsp;LIFE 2</div>
+  </div>
+
 </div>
-<div class="sub">
-<div class="left" id="status">DA VILLE DOUBLE LIFE COMP</div>
-<div class="mid"><span class="ball">8</span></div>
-<div class="right" id="match">SEMI FINAL&nbsp;&nbsp;|&nbsp;&nbsp;LIFE 2</div>
-</div>
-</div>
+
 <script type="module">
-import {initializeApp} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-import {getDatabase,ref,onValue} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
-const firebaseConfig={apiKey:"AIzaSyBjxhhz_OJBayYsnbmmfNlzKrpM3rUZ1f4",authDomain:"pool-scoreboard-71c93.firebaseapp.com",databaseURL:"https://pool-scoreboard-71c93-default-rtdb.firebaseio.com",projectId:"pool-scoreboard-71c93",storageBucket:"pool-scoreboard-71c93.firebasestorage.app",messagingSenderId:"401721132284",appId:"1:401721132284:web:65b755b148d1163a7a4379",measurementId:"G-FPBCYM0H1Z"};
-const db=getDatabase(initializeApp(firebaseConfig));
-onValue(ref(db,"poolScoreboard/room1"),snap=>{const d=snap.val()||{};p1.textContent=d.player1||"PLAYER 1";p2.textContent=d.player2||"PLAYER 2";s1.textContent=d.score1??0;s2.textContent=d.score2??0;frame.textContent=d.frame??1;event.textContent=d.event||"POOL COMPETITION";status.textContent=d.status||"DA VILLE DOUBLE LIFE COMP";match.textContent=d.match||"SEMI FINAL | LIFE 2"});
+import { initializeApp }
+  from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import { getDatabase, ref, onValue }
+  from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBjxhhz_OJBayYsnbmmfNlzKrpM3rUZ1f4",
+  authDomain: "pool-scoreboard-71c93.firebaseapp.com",
+  databaseURL: "https://pool-scoreboard-71c93-default-rtdb.firebaseio.com",
+  projectId: "pool-scoreboard-71c93",
+  storageBucket: "pool-scoreboard-71c93.firebasestorage.app",
+  messagingSenderId: "401721132284",
+  appId: "1:401721132284:web:65b755b148d1163a7a4379",
+  measurementId: "G-FPBCYM0H1Z"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const room = ref(db, "poolScoreboard/room1");
+
+onValue(room, (snap) => {
+  const d = snap.val() || {};
+  document.getElementById("p1").textContent = d.p1 ?? "CEASER CHANDIGA";
+  document.getElementById("p2").textContent = d.p2 ?? "ASIKU JUNIOR";
+  document.getElementById("s1").textContent = d.s1 ?? 2;
+  document.getElementById("s2").textContent = d.s2 ?? 2;
+  document.getElementById("frame").textContent = "(" + (d.frame ?? 6) + ")";
+  document.getElementById("status").textContent =
+    d.status ?? "DA VILLE DOUBLE LIFE COMP";
+  document.getElementById("event").textContent =
+    d.match ?? "SEMI FINAL  |  LIFE 2";
+});
 </script>
 </body>
 </html>
