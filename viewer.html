@@ -1,149 +1,376 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Pool Scoreboard Viewer</title>
-<style>
-*{box-sizing:border-box}
-html,body{margin:0;width:100%;height:100%;background:transparent;overflow:hidden}
-body{font-family:Arial,Helvetica,sans-serif}
-.scoreboard{
-  position:absolute;
-  left:50%;
-  bottom:0;
-  transform:translateX(-50%);
-  width:min(100%,1100px);
-  color:#fff;
-  font-weight:700;
-  text-transform:uppercase;
-}
-.top{
-  min-height:68px;
-  display:grid;
-  grid-template-columns:1fr auto 1fr;
-  align-items:center;
-  background:#111318;
-}
-.player{
-  padding:14px 24px;
-  font-size:clamp(14px,2vw,24px);
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-.left{border-left:7px solid #2375d8}
-.right{text-align:right;border-right:7px solid #d9363e}
-.score{
-  padding:8px 22px;
-  font-size:clamp(22px,3.4vw,40px);
-  white-space:nowrap;
-}
-.bottom{
-  display:grid;
-  grid-template-columns:1fr auto 1fr;
-  align-items:center;
-  min-height:38px;
-  background:#08090b;
-  font-size:clamp(9px,1.2vw,14px);
-  letter-spacing:.04em;
-}
-.info{padding:9px 18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.info.right{text-align:right;border-right:0}
-.ball{
-  width:25px;height:25px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  background:#f3f3f3;color:#111;font-size:11px;
-}
-@media(max-width:600px){
-  .player{padding:10px 12px}
-  .score{padding:6px 10px}
-  .info{padding:7px 10px}
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  />
+  <title>Pool Scoreboard Viewer</title>
+
+  <style>
+    :root {
+      --bg: transparent;
+      --bar: rgba(8, 9, 12, 0.96);
+      --bar-soft: rgba(14, 15, 19, 0.96);
+      --text: #ffffff;
+      --muted: #aeb3bd;
+      --blue: #3f8cff;
+      --red: #e94d5f;
+      --border: rgba(255, 255, 255, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: transparent !important;
+    }
+
+    body {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      font-family:
+        Inter,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif;
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    .scoreboard {
+      width: min(100%, 1100px);
+      margin: 0 auto;
+      background: transparent;
+    }
+
+    /* Main scoreboard bar */
+    .main-bar {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      align-items: stretch;
+      min-height: 82px;
+      background: var(--bar);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 5px 18px rgba(0, 0, 0, 0.28);
+    }
+
+    .player {
+      position: relative;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      padding: 13px 24px;
+    }
+
+    .player-one {
+      justify-content: flex-start;
+      border-left: 4px solid var(--blue);
+    }
+
+    .player-two {
+      justify-content: flex-end;
+      text-align: right;
+      border-right: 4px solid var(--red);
+    }
+
+    .player-name {
+      min-width: 0;
+      overflow: hidden;
+      color: var(--text);
+      font-size: clamp(15px, 2vw, 24px);
+      font-weight: 650;
+      line-height: 1.1;
+      letter-spacing: 0.035em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    /* Center score */
+    .score-center {
+      display: grid;
+      grid-template-columns: auto auto auto;
+      align-items: center;
+      justify-items: center;
+      min-width: 230px;
+      padding: 0 18px;
+      background: rgba(0, 0, 0, 0.22);
+    }
+
+    .score {
+      min-width: 52px;
+      color: #fff;
+      font-size: clamp(27px, 4vw, 42px);
+      font-weight: 750;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+      text-align: center;
+    }
+
+    .frame {
+      padding: 0 13px;
+      color: var(--muted);
+      font-size: clamp(10px, 1.25vw, 13px);
+      font-weight: 650;
+      letter-spacing: 0.11em;
+      line-height: 1;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    /* Secondary information bar */
+    .info-bar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 44px minmax(0, 1fr);
+      align-items: center;
+      min-height: 39px;
+      background: var(--bar-soft);
+      border-top: 1px solid rgba(255, 255, 255, 0.025);
+      box-shadow: 0 5px 18px rgba(0, 0, 0, 0.2);
+    }
+
+    .event,
+    .match {
+      min-width: 0;
+      padding: 8px 20px;
+      color: #f1f1f3;
+      font-size: clamp(9px, 1.15vw, 12px);
+      font-weight: 600;
+      letter-spacing: 0.075em;
+      line-height: 1;
+      text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .match {
+      text-align: right;
+    }
+
+    .ball {
+      width: 22px;
+      height: 22px;
+      margin: auto;
+      border-radius: 50%;
+      background:
+        radial-gradient(
+          circle at 35% 32%,
+          #444 0,
+          #181818 42%,
+          #050505 75%
+        );
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow:
+        inset -2px -2px 4px rgba(0, 0, 0, 0.8),
+        0 1px 3px rgba(0, 0, 0, 0.6);
+      position: relative;
+    }
+
+    .ball::after {
+      content: "8";
+      position: absolute;
+      inset: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: #f4f4f4;
+      color: #080808;
+      font-family: Georgia, serif;
+      font-size: 8px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    /* Portrait / narrow screens */
+    @media (max-width: 600px) {
+      .main-bar {
+        min-height: 68px;
+      }
+
+      .player {
+        padding: 10px 12px;
+      }
+
+      .player-one {
+        border-left-width: 3px;
+      }
+
+      .player-two {
+        border-right-width: 3px;
+      }
+
+      .score-center {
+        min-width: 142px;
+        padding: 0 6px;
+      }
+
+      .score {
+        min-width: 34px;
+      }
+
+      .frame {
+        padding: 0 6px;
+        letter-spacing: 0.06em;
+      }
+
+      .info-bar {
+        grid-template-columns: minmax(0, 1fr) 34px minmax(0, 1fr);
+        min-height: 34px;
+      }
+
+      .event,
+      .match {
+        padding: 7px 10px;
+        letter-spacing: 0.04em;
+      }
+
+      .ball {
+        width: 19px;
+        height: 19px;
+      }
+
+      .ball::after {
+        inset: 3px;
+        font-size: 7px;
+      }
+    }
+
+    /* Very narrow portrait screens */
+    @media (max-width: 390px) {
+      .player {
+        padding-left: 8px;
+        padding-right: 8px;
+      }
+
+      .score-center {
+        min-width: 126px;
+      }
+
+      .score {
+        min-width: 29px;
+      }
+
+      .frame {
+        padding: 0 4px;
+        font-size: 9px;
+      }
+
+      .event,
+      .match {
+        padding-left: 7px;
+        padding-right: 7px;
+        font-size: 8px;
+      }
+    }
+  </style>
 </head>
+
 <body>
+  <main class="scoreboard" aria-label="Pool tournament scoreboard">
+    <section class="main-bar">
+      <div class="player player-one">
+        <div id="p1" class="player-name"></div>
+      </div>
 
-<div class="scoreboard">
+      <div class="score-center">
+        <div id="s1" class="score">0</div>
+        <div class="frame">
+          FRAME <span id="frame">1</span>
+        </div>
+        <div id="s2" class="score">0</div>
+      </div>
 
-  <div class="top">
-    <div class="player left" id="player1"></div>
+      <div class="player player-two">
+        <div id="p2" class="player-name"></div>
+      </div>
+    </section>
 
-    <div class="score">
-      <span id="score1">0</span>
-      <span> (</span><span id="frame">1</span><span>) </span>
-      <span id="score2">0</span>
-    </div>
+    <section class="info-bar">
+      <div id="event" class="event"></div>
 
-    <div class="player right" id="player2"></div>
-  </div>
+      <div class="ball" aria-hidden="true"></div>
 
-  <div class="bottom">
-    <div class="info" id="event"></div>
-    <div class="ball">8</div>
-    <div class="info right" id="match"></div>
-  </div>
+      <div id="match" class="match"></div>
+    </section>
+  </main>
 
-</div>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+    import {
+      getDatabase,
+      ref,
+      onValue
+    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
 
-<script type="module">
-import {initializeApp}
-from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+    const firebaseConfig = {
+      apiKey: "AIzaSyBjxhhz_OJBayYsnbmmfNlzKrpM3rUZ1f4",
+      authDomain: "pool-scoreboard-71c93.firebaseapp.com",
+      databaseURL: "https://pool-scoreboard-71c93-default-rtdb.firebaseio.com",
+      projectId: "pool-scoreboard-71c93",
+      storageBucket: "pool-scoreboard-71c93.firebasestorage.app",
+      messagingSenderId: "401721132284",
+      appId: "1:401721132284:web:65b755b148d1163a7a4379",
+      measurementId: "G-FPBCYM0H1Z"
+    };
 
-import {getDatabase,ref,onValue}
-from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const roomRef = ref(db, "poolScoreboard/room1");
 
-const firebaseConfig={
-  apiKey:"AIzaSyBjxhhz_OJBayYsnbmmfNlzKrpM3rUZ1f4",
-  authDomain:"pool-scoreboard-71c93.firebaseapp.com",
-  databaseURL:"https://pool-scoreboard-71c93-default-rtdb.firebaseio.com",
-  projectId:"pool-scoreboard-71c93",
-  storageBucket:"pool-scoreboard-71c93.firebasestorage.app",
-  messagingSenderId:"401721132284",
-  appId:"1:401721132284:web:65b755b148d1163a7a4379",
-  measurementId:"G-FPBCYM0H1Z"
-};
+    const p1El = document.getElementById("p1");
+    const p2El = document.getElementById("p2");
+    const s1El = document.getElementById("s1");
+    const s2El = document.getElementById("s2");
+    const frameEl = document.getElementById("frame");
+    const eventEl = document.getElementById("event");
+    const matchEl = document.getElementById("match");
 
-const app=initializeApp(firebaseConfig);
-const db=getDatabase(app);
-const roomRef=ref(db,"poolScoreboard/room1");
+    /*
+     * The initial HTML above is deliberately already in the required
+     * fresh state. Firebase is the only source of subsequent data.
+     */
+    onValue(roomRef, (snapshot) => {
+      const data = snapshot.val();
 
-const defaults={
-  p1:"",
-  p2:"",
-  s1:0,
-  s2:0,
-  frame:1,
-  event:"",
-  match:""
-};
+      const scoreboard = data && typeof data === "object" ? data : {};
 
-function render(data){
-  const state={
-    p1:data.p1 ?? "",
-    p2:data.p2 ?? "",
-    s1:Number(data.s1 ?? 0),
-    s2:Number(data.s2 ?? 0),
-    frame:Number(data.frame ?? 1),
-    event:data.event ?? "",
-    match:data.match ?? ""
-  };
+      p1El.textContent =
+        scoreboard.p1 == null ? "" : String(scoreboard.p1);
 
-  document.getElementById("player1").textContent=state.p1;
-  document.getElementById("player2").textContent=state.p2;
-  document.getElementById("score1").textContent=state.s1;
-  document.getElementById("score2").textContent=state.s2;
-  document.getElementById("frame").textContent=state.frame;
-  document.getElementById("event").textContent=state.event;
-  document.getElementById("match").textContent=state.match;
-}
+      p2El.textContent =
+        scoreboard.p2 == null ? "" : String(scoreboard.p2);
 
-render(defaults);
+      s1El.textContent =
+        scoreboard.s1 == null ? "0" : String(scoreboard.s1);
 
-onValue(roomRef,snapshot=>{
-  render(snapshot.val() || defaults);
-});
-</script>
+      s2El.textContent =
+        scoreboard.s2 == null ? "0" : String(scoreboard.s2);
 
+      frameEl.textContent =
+        scoreboard.frame == null ? "1" : String(scoreboard.frame);
+
+      eventEl.textContent =
+        scoreboard.event == null ? "" : String(scoreboard.event);
+
+      matchEl.textContent =
+        scoreboard.match == null ? "" : String(scoreboard.match);
+    });
+  </script>
 </body>
 </html>
