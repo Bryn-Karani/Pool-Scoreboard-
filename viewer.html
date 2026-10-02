@@ -88,7 +88,6 @@ function draw(s){
   if(set("nB",(s.nb||"").toUpperCase()))fit($("nB"),370);
   if(set("ev",(s.ev||"").toUpperCase()))fit($("ev"),440);
   if(set("rd",(s.rd||"").toUpperCase()))fit($("rd"),440);
-  $("dt").setAttribute("visibility",(s.ev||s.rd)?"visible":"hidden");
   $("bd").classList.remove("off");
 }
 function parse(t){try{return JSON.parse(t)}catch(e){return null}}
