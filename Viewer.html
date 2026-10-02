@@ -50,7 +50,7 @@ text{font-family:"Barlow Semi Condensed","Arial Narrow",Arial,sans-serif;font-we
 <text id="nB" class="name" x="1438" y="110" text-anchor="end"></text>
 <text id="sA" class="sc" x="725" y="122">0</text>
 <text id="pen" class="sc" x="835" y="122" style="font-size:54px" visibility="hidden">(0)</text>
-<text id="sB" class="sc" x="945" y="122">0</text>
+<text id="scB" class="sc" x="945" y="122">0</text>
 
 <!-- DETAILS BAR -->
 <g id="dt">
@@ -79,7 +79,7 @@ function set(id,v){var e=$(id);if(e.textContent!==String(v)){e.textContent=v;ret
 function draw(s){
   if(!s||typeof s!=="object")return;
   var rm=matchMedia("(prefers-reduced-motion:reduce)").matches;
-  [["a","sA"],["b","sB"]].forEach(function(p){
+  [["a","sA"],["b","scB"]].forEach(function(p){
     if(set(p[1],s[p[0]])&&cur[p[0]]!==undefined&&!rm){var e=$(p[1]);e.classList.remove("pop");void e.getBBox();e.classList.add("pop")}
     cur[p[0]]=s[p[0]]});
   var hp=s.p!==null&&s.p!==undefined;
@@ -92,20 +92,19 @@ function draw(s){
 }
 function parse(t){try{return JSON.parse(t)}catch(e){return null}}
 var base="https://ntfy.sh/sb-"+encodeURIComponent(room),es=null,seen=0;
-// Fetch the newest stored message (used on start and as a backup poll)
-function load(since){fetch(base+"/json?poll=1&since="+(since||"latest")).then(function(r){return r.text()}).then(function(t){
+// Fetch only the newest message
+function load(){fetch(base+"/json?poll=1&since=latest").then(function(r){return r.text()}).then(function(t){
   var last=null;t.trim().split("\n").forEach(function(l){var m=parse(l);if(m&&m.event==="message")last=m.message});
   if(last)draw(parse(last))}).catch(function(){})}
 function connect(){if(es)es.close();seen=Date.now();es=new EventSource(base+"/sse");
   es.onmessage=function(e){seen=Date.now();var m=parse(e.data);if(m&&m.message)draw(parse(m.message))};
-  es.addEventListener("open",function(){seen=Date.now();load("12h")});
+  es.addEventListener("open",function(){seen=Date.now();load()});
   es.addEventListener("keepalive",function(){seen=Date.now()})}
 var DEMO={a:0,b:0,p:1,na:"Team A",nb:"Team B",ev:"Event name",rd:"Round | Stage"};
-// no room code, or nothing received yet: show the board with placeholder text instead of a blank page
 if(!room)draw(DEMO);
 else setTimeout(function(){if($("bd").classList.contains("off"))draw(DEMO)},2500);
-if(room){load("12h");connect();
-  setInterval(load,5000); // backup poll: catches anything SSE misses
+if(room){load();connect();
+  setInterval(load,5000); // backup poll
   setInterval(function(){if(Date.now()-seen>30000)connect()},10000);
   document.addEventListener("visibilitychange",function(){if(!document.hidden){load();connect()}});
   addEventListener("online",function(){load();connect()})}
