@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Premium Pool Scoreboard</title><style>
+<title>Premium Billiards Scoreboard</title><style>
 html,body{
   margin:0;
   width:100%;
@@ -35,13 +35,11 @@ text{
 }
 
 .player{
-  font-family:Georgia,"Times New Roman",serif;
   font-size:29px;
   letter-spacing:.3px;
 }
 
 .score{
-  font-family:Georgia,"Times New Roman",serif;
   font-size:56px;
   font-weight:700;
 }
@@ -82,7 +80,7 @@ aria-label="Premium live pool scoreboard"
 
 «»
 
-<defs>  <!-- Main club panel -->  <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+<defs>  <!-- Main panel -->  <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
     <stop offset="0" stop-color="#171914"/>
     <stop offset=".48" stop-color="#11130f"/>
     <stop offset="1" stop-color="#0a0c09"/>
@@ -93,25 +91,30 @@ aria-label="Premium live pool scoreboard"
     <stop offset="0" stop-color="#8c7135"/>
     <stop offset=".5" stop-color="#e1c777"/>
     <stop offset="1" stop-color="#92773b"/>
-  </linearGradient>  <!-- Felt green -->  <linearGradient id="felt" x1="0" y1="0" x2="1" y2="0">
+  </linearGradient>  <!-- Pool-table felt -->  <linearGradient id="felt" x1="0" y1="0" x2="1" y2="0">
     <stop offset="0" stop-color="#173d2d"/>
     <stop offset=".5" stop-color="#235b42"/>
     <stop offset="1" stop-color="#173d2d"/>
-  </linearGradient><filter id="shadow"
+  </linearGradient>  <!-- Panel shadow --><filter
+id="shadow"
 x="-30%"
 y="-30%"
 width="160%"
-height="160%">
-<feDropShadow
-dx="0"
-dy="3"
-stdDeviation="4"
-flood-color="#000"
-flood-opacity=".65"
-/>
-</filter>
+height="160%"
 
-</defs><!-- ================================================= --><!-- MAIN CLUB BOARD --><!-- ================================================= --><rect
+«»
+
+<feDropShadow
+  dx="0"
+  dy="3"
+  stdDeviation="4"
+  flood-color="#000"
+  flood-opacity=".65"
+/>
+
+  </filter></defs><!-- =====================================================
+     MAIN SCOREBOARD
+===================================================== --><rect
 x="0"
 y="0"
 width="1200"
@@ -121,7 +124,7 @@ fill="url(#panel)"
 filter="url(#shadow)"
 />
 
-<!-- Fine gold border --><rect
+<!-- Outer gold border --><rect
 x="1"
 y="1"
 width="1198"
@@ -132,7 +135,7 @@ stroke="url(#gold)"
 stroke-width="1"
 />
 
-<!-- Inner border --><rect
+<!-- Inner decorative border --><rect
 x="8"
 y="8"
 width="1184"
@@ -144,7 +147,9 @@ stroke-opacity=".35"
 stroke-width="1"
 />
 
-<!-- ================================================= --><!-- PLAYER SIDE ACCENTS --><!-- ================================================= --><rect
+<!-- =====================================================
+     SIDE FELT ACCENTS
+===================================================== --><rect
 x="9"
 y="9"
 width="4"
@@ -160,7 +165,9 @@ height="94"
 fill="url(#felt)"
 />
 
-<!-- Player markers --><circle
+<!-- =====================================================
+     PLAYER MARKERS
+===================================================== --><circle
 cx="32"
 cy="55"
 r="5"
@@ -174,7 +181,9 @@ r="5"
 fill="#c9ac5b"
 />
 
-<!-- ================================================= --><!-- PLAYER NAMES --><!-- ================================================= --><text
+<!-- =====================================================
+     PLAYER NAMES
+===================================================== --><text
 id="p1"
 class="player"
 x="50"
@@ -192,7 +201,9 @@ text-anchor="end"
 
 «»
 
-</text><!-- ================================================= --><!-- CENTER SCORE MODULE --><!-- ================================================= --><rect
+</text><!-- =====================================================
+     CENTER SCORE MODULE
+===================================================== --><rect
 x="447"
 y="12"
 width="306"
@@ -212,7 +223,9 @@ height="2"
 fill="url(#gold)"
 />
 
-<!-- Scores --><text
+<!-- =====================================================
+     SCORES
+===================================================== --><text
 id="s1"
 class="score"
 x="515"
@@ -236,7 +249,7 @@ text-anchor="middle"
 0
 </text>
 
-<!-- Center divider --><line
+<!-- Score divider --><line
 x1="600"
 y1="30"
 x2="600"
@@ -246,7 +259,9 @@ stroke-opacity=".6"
 stroke-width="1"
 />
 
-<!-- ================================================= --><!-- 8 BALL EMBLEM --><!-- ================================================= --><circle
+<!-- =====================================================
+     8-BALL EMBLEM
+===================================================== --><circle
 cx="600"
 cy="30"
 r="13"
@@ -278,7 +293,9 @@ fill:#111;
 8
 </text>
 
-<!-- ================================================= --><!-- FRAME --><!-- ================================================= --><text
+<!-- =====================================================
+     FRAME
+===================================================== --><text
 id="fr"
 class="frame"
 x="600"
@@ -290,7 +307,9 @@ text-anchor="middle"
 FRAME 1
 </text>
 
-<!-- ================================================= --><!-- FOOTER --><!-- ================================================= --><rect
+<!-- =====================================================
+     FOOTER
+===================================================== --><rect
 x="0"
 y="112"
 width="1200"
@@ -298,7 +317,7 @@ height="46"
 fill="#080a08"
 />
 
-<rect
+<!-- Gold footer line --><rect
 x="0"
 y="112"
 width="1200"
@@ -307,7 +326,9 @@ fill="url(#gold)"
 opacity=".7"
 />
 
-<!-- Left club branding --><text
+<!-- =====================================================
+     CLUB BRANDING
+===================================================== --><text
 x="27"
 y="137"
 class="club"
@@ -329,7 +350,9 @@ fill="#6eaa83"
 ● LIVE MATCH
 </text>
 
-<!-- Event --><text
+<!-- =====================================================
+     EVENT
+===================================================== --><text
 id="ev"
 class="meta"
 x="600"
@@ -339,7 +362,9 @@ fill="#ddd7c7"
 
 «»
 
-</text><!-- Match --><text
+</text><!-- =====================================================
+     MATCH
+===================================================== --><text
 id="ma"
 class="meta"
 x="1172"
@@ -349,8 +374,23 @@ fill="#aaa58f"
 
 «»
 
-</text><!-- Small gold endpoint ornaments --><circle cx="11" cy="137" r="2" fill="#c9ac5b"/>
-<circle cx="1189" cy="137" r="2" fill="#c9ac5b"/></svg><script type="module">
+</text><!-- Decorative footer ornaments --><circle
+cx="11"
+cy="137"
+r="2"
+fill="#c9ac5b"
+/>
+
+<circle
+cx="1189"
+cy="137"
+r="2"
+fill="#c9ac5b"
+/>
+
+</svg><!-- =====================================================
+     FIREBASE
+===================================================== --><script type="module">
 
 import {
   initializeApp
@@ -363,20 +403,33 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-database.js";
 
 
-/* =====================================================
-   FIREBASE
-===================================================== */
-
 const firebaseConfig = {
-  apiKey: "AIzaSyBjxhhz_OJBayYsnbmmfNlzKrpM3rUZ1f4",
-  authDomain: "pool-scoreboard-71c93.firebaseapp.com",
-  databaseURL: "https://pool-scoreboard-71c93-default-rtdb.firebaseio.com",
-  projectId: "pool-scoreboard-71c93",
-  storageBucket: "pool-scoreboard-71c93.firebasestorage.app",
-  messagingSenderId: "401721132284",
-  appId: "1:401721132284:web:65b755b148d1163a7a4379",
-  measurementId: "G-FPBCYM0H1Z"
+
+  apiKey:
+    "AIzaSyBjxhhz_OJBayYsnbmmfNlzKrpM3rUZ1f4",
+
+  authDomain:
+    "pool-scoreboard-71c93.firebaseapp.com",
+
+  databaseURL:
+    "https://pool-scoreboard-71c93-default-rtdb.firebaseio.com",
+
+  projectId:
+    "pool-scoreboard-71c93",
+
+  storageBucket:
+    "pool-scoreboard-71c93.firebasestorage.app",
+
+  messagingSenderId:
+    "401721132284",
+
+  appId:
+    "1:401721132284:web:65b755b148d1163a7a4379",
+
+  measurementId:
+    "G-FPBCYM0H1Z"
 };
+
 
 const app = initializeApp(firebaseConfig);
 
@@ -395,35 +448,72 @@ const $ = id =>
 
 
 /* =====================================================
-   LIVE SCOREBOARD
+   FIREBASE REALTIME UPDATE
 ===================================================== */
 
-onValue(scoreboardRef, snapshot => {
+onValue(
+  scoreboardRef,
 
-  const data = snapshot.val() || {};
+  snapshot => {
 
-  $("p1").textContent =
-    data.p1 ?? "";
+    const data =
+      snapshot.val() || {};
 
-  $("p2").textContent =
-    data.p2 ?? "";
 
-  $("s1").textContent =
-    Number(data.s1 ?? 0);
+    /* Player 1 */
 
-  $("s2").textContent =
-    Number(data.s2 ?? 0);
+    $("p1").textContent =
+      data.p1 ?? "";
 
-  $("fr").textContent =
-    "FRAME " + Number(data.frame ?? 1);
 
-  $("ev").textContent =
-    data.event ?? "";
+    /* Player 2 */
 
-  $("ma").textContent =
-    data.match ?? "";
+    $("p2").textContent =
+      data.p2 ?? "";
 
-});
+
+    /* Score 1 */
+
+    $("s1").textContent =
+      Number(data.s1 ?? 0);
+
+
+    /* Score 2 */
+
+    $("s2").textContent =
+      Number(data.s2 ?? 0);
+
+
+    /* Frame */
+
+    $("fr").textContent =
+      "FRAME " +
+      Number(data.frame ?? 1);
+
+
+    /* Event */
+
+    $("ev").textContent =
+      data.event ?? "";
+
+
+    /* Match */
+
+    $("ma").textContent =
+      data.match ?? "";
+
+  },
+
+  error => {
+
+    console.error(
+      "Firebase scoreboard error:",
+      error
+    );
+
+  }
+
+);
 
 </script></body>
-  </html>
+</html>
